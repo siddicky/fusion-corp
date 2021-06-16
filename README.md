@@ -172,19 +172,25 @@ ldapdomaindump $IP -u 'fusion.corp\lparker' -p '****************' --no-json --no
 
 We get a file called domain_users.html. Using your fav HTML viewer (some people even have those), you should see the following information:
 
-[Insert Image]
+![domain users html](domain-users-html.png)
 
 With the newly found credentials, we can log in as the user jmurphy and get the second flag!
 
 # Getting Admin
 
-From the Domain users table, we can see that this user is a member of **Backup Operators**, something Lparker wasn't. This will serve as the path to getting root. Looking into this group we can see that the members have permissions to create back up files and we can leverage this fact to get create a copy of the **Ntds.dit** file. I'm sure two questions arise:
+From the Domain users table, we can see that this user is a member of **Backup Operators**, something Lparker wasn't. 
+
+![backup operators group](backup-operators.png)
+
+This will serve as the path to getting root. Looking into this group we can see that the members have permissions to create back up files and we can leverage this fact to get create a copy of the **Ntds.dit** file. I'm sure two questions arise:
 - Why this file?
 - Why go to the trouble of creating a backup file?
 
 Well to answer the first question, the Ntds.dit file is a database that stores Active Directory data, including information about user objects, groups, and group membership. It includes the password hashes for all users in the domain. So obviously it's a gold mine for us.
 
 Secondly, this file is constantly in use by AD and locked. If you try to simply copy the file, you will see an error message similar to:
+
+![ntds.dit error](ntdsdit-error.png)
 
 An in-depth guide for this can be found at https://www.ultimatewindowssecurity.com/blog/default.aspx?d=10/2017. We will be following the steps mentioned there to get root.
 
@@ -244,7 +250,7 @@ The shadow copy was successfully exposed as z:\.
 
 ## Permission block!
 
-As with any ctfs, life simply can't be that easy otherwise what's the point? When we try to copy the backup `NTDS.dit` we can't due to insufficient privileges as shown below:
+As with any ctfs, life simply can't be that easy otherwise what's the point? When we try to copy the backup NTDS.dit we can't due to insufficient privileges as shown below:
 
 ```powershell
 *Evil-WinRM* PS C:\tmp> get-acl Z:\windows\ntds\ntds.dit |fl
